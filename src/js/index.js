@@ -1,7 +1,7 @@
-import '../style/index.scss';
 import { routes } from './routes';
+import '../style/index.scss';
 
-const callRoute = () => {
+const callRoute = async () => {
     const { hash } = window.location;
     const pathParts = hash.substring(1).split('/');
   
@@ -10,9 +10,11 @@ const callRoute = () => {
     const pageFunction = routes[pageName];
   
     if (pageFunction !== undefined) {
-      pageFunction(pageArgument);
+        const pageContent = await pageFunction(pageArgument);
+        document.getElementById('app').innerHTML = pageContent;  // Mettre à jour le contenu de la page
     }
-  };
-  
-  window.addEventListener('hashchange', () => callRoute());
-  window.addEventListener('DOMContentLoaded', () => callRoute());
+};
+
+// Gestion des événements de changement de hash et au chargement de la page
+window.addEventListener('hashchange', () => callRoute());
+window.addEventListener('DOMContentLoaded', () => callRoute());
